@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum USER_STATUS {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id        String      @id @default(uuid())
+  authId    String      @unique // ClerkId
+  email     String      @unique // email
+  status    USER_STATUS @default(ACTIVE)
+  records   Record[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum OPERATION_TYPE {
+  ADDITION
+  SUBSTRACTION
+  MULTIPLICATION
+  DIVISION
+  SQUARE_ROOT
+  RANDOM_STRING
+}
+
+model Operation {
+  id      String         @id @default(uuid())
+  type    OPERATION_TYPE @default(ADDITION)
+  cost    Int
+  records Record[]
+}
+
+model Record {
+  id          String    @id @default(uuid())
+  amount      Float
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  operation   Operation @relation(fields: [operationId], references: [id])
+  operationId String
+  date        DateTime  @default(now())
+}
