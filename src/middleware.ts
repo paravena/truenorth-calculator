@@ -1,7 +1,8 @@
 import { authMiddleware } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 
-const SERVER_URL = process.env.RAILWAY_STATIC_URL || 'http://localhost:3000';
+const SERVER_URL =
+  `https://${process.env.RAILWAY_STATIC_URL}` || 'http://localhost:3000';
 
 export default authMiddleware({
   afterAuth(auth, req, evt) {
@@ -17,8 +18,8 @@ export default authMiddleware({
     );
     if (!auth.userId && !auth.isPublicRoute) {
       console.log(`Redirecting`);
-      const signInUrl = new URL('/sign-in', req.url);
-      signInUrl.searchParams.set('redirect_url', req.url);
+      const signInUrl = new URL('/sign-in', SERVER_URL);
+      signInUrl.searchParams.set('redirect_url', SERVER_URL);
       return NextResponse.redirect(signInUrl);
     }
   },
