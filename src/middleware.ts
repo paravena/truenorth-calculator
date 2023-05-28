@@ -23,7 +23,7 @@ export default authMiddleware({
       return NextResponse.redirect(signInUrl);
     }
   },
-  publicRoutes: ['/sign-in/.*', '/sign-up/.*'],
+  publicRoutes: ['/sign-in/', '/sign-up/'],
 });
 
 export const config = {
