@@ -7,7 +7,9 @@ export default authMiddleware({
     console.log(
       `auth.userId: ${auth.userId} isPublicRoute: ${auth.isPublicRoute}`,
     );
-    console.log(`req.url ${req.url}`);
+    console.log(
+      `req.url ${req.url} pathname: ${req.nextUrl.pathname} hostname: ${req.nextUrl.hostname} domainLocale ${req.nextUrl.domainLocale}`,
+    );
     if (!auth.userId && !auth.isPublicRoute) {
       console.log(`Redirecting`);
       const signInUrl = new URL('/sign-in', req.url);
