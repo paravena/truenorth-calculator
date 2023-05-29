@@ -7,19 +7,19 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const data = await request.json();
-  console.log('request.body', data, data.email_addresses);
+  console.log(`id ${data.id}, email_addresses ${data.email_addresses}`);
 
-  const id = data.id;
-  const email = data.email_addresses[0].email_address;
+  // const id = data.id;
+  // const email = data.email_addresses[0].email_address;
+  //
+  // console.log(`id ${id} email ${email}`);
 
-  console.log(`id ${id} email ${email}`);
-
-  if (id && email) {
-    const newUser = await prisma.user.create({
-      data: { email, id: id, authId: id },
-    });
-    console.log('new user', newUser);
-  }
+  // if (id && email) {
+  //   const newUser = await prisma.user.create({
+  //     data: { email, id: id, authId: id },
+  //   });
+  //   console.log('new user', newUser);
+  // }
 
   return new Response('Hello, Next.js!');
 }
