@@ -6,9 +6,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const data = await request.json();
+  const { data } = await request.json();
   console.log('data', data);
-  // console.log(`id ${data.id}, email_addresses ${data.email_addresses}`);
+  console.log(`id ${data.id}, email_addresses ${data.email_addresses}`);
 
   // const id = data.id;
   // const email = data.email_addresses[0].email_address;
