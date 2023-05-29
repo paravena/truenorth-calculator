@@ -15,12 +15,12 @@ export async function POST(request: Request) {
 
   console.log(`id ${id} email ${email}`);
 
-  // if (id && email) {
-  //   const newUser = await prisma.user.create({
-  //     data: { email, id: id, authId: id },
-  //   });
-  //   console.log('new user', newUser);
-  // }
+  if (id && email) {
+    const newUser = await prisma.user.create({
+      data: { email, id: id, authId: id },
+    });
+    console.log('new user', newUser);
+  }
 
   return new Response('Hello, Next.js!');
 }
