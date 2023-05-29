@@ -17,7 +17,6 @@ enum USER_STATUS {
 
 model User {
   id        String      @id @default(uuid())
-  authId    String      @unique // ClerkId
   email     String      @unique // email
   status    USER_STATUS @default(ACTIVE)
   records   Record[]

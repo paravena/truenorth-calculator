@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
   if (id && email) {
     const newUser = await prisma.user.create({
-      data: { email, id: id, authId: id },
+      data: { email, id: id },
     });
     console.log('new user', newUser);
   }
