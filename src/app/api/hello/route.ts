@@ -1,4 +1,3 @@
-import { User } from '@clerk/backend';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 export async function GET(request: Request) {
@@ -7,11 +6,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const data: User = await request.json();
-  console.log('request.body', data, data.emailAddresses);
+  const data = await request.json();
+  console.log('request.body', data, data.email_addresses);
 
   const id = data.id;
-  const email = data.emailAddresses[0].emailAddress;
+  const email = data.email_addresses[0].email_address;
 
   console.log(`id ${id} email ${email}`);
 
