@@ -4,6 +4,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  console.log('request.body', request.body);
+  const data = await request.json();
+  console.log('request.body', data);
   return new Response('Hello, Next.js!');
 }
