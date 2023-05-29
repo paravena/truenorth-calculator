@@ -10,10 +10,10 @@ export async function POST(request: Request) {
   console.log('data', data);
   console.log(`id ${data.id}, email_addresses ${data.email_addresses}`);
 
-  // const id = data.id;
-  // const email = data.email_addresses[0].email_address;
-  //
-  // console.log(`id ${id} email ${email}`);
+  const id = data.id;
+  const email = data.email_addresses[0].email_address;
+
+  console.log(`id ${id} email ${email}`);
 
   // if (id && email) {
   //   const newUser = await prisma.user.create({
