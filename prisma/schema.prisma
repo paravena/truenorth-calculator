@@ -16,12 +16,13 @@ enum USER_STATUS {
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique // email
-  status    USER_STATUS @default(ACTIVE)
-  records   Record[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        String            @id @default(uuid())
+  email     String            @unique // email
+  status    USER_STATUS       @default(ACTIVE)
+  records   OperationRecord[]
+  amount    Float             @default(1000)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
 
 enum OPERATION_TYPE {
@@ -34,13 +35,13 @@ enum OPERATION_TYPE {
 }
 
 model Operation {
-  id      String         @id @default(uuid())
-  type    OPERATION_TYPE @default(ADDITION)
+  id      String            @id @default(uuid())
+  type    OPERATION_TYPE    @default(ADDITION)
   cost    Int
-  records Record[]
+  records OperationRecord[]
 }
 
-model Record {
+model OperationRecord {
   id          String    @id @default(uuid())
   amount      Float
   user        User      @relation(fields: [userId], references: [id])

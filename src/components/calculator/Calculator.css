@@ -1,0 +1,23 @@
+.calculator__container {
+  @apply mx-auto w-72 rounded-md bg-gray-800 p-4;
+}
+
+.calculator__result-input {
+  @apply mb-4 rounded-md bg-gray-900 px-1 py-2 text-right text-2xl text-white outline-none;
+}
+
+.calculator__button-container {
+  @apply grid grid-cols-4 gap-2;
+}
+
+.rounded-button {
+  @apply rounded-md py-2 text-white;
+}
+
+.rounded-button--secondary {
+  @apply bg-gray-600 hover:bg-gray-700;
+}
+
+.rounded-button--primary {
+  @apply bg-yellow-500 hover:bg-yellow-600;
+}

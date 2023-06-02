@@ -1,133 +1,146 @@
 'use client';
-
+import './Calculator.css';
 import React, { useState } from 'react';
+import { isOperator, OperatorItem } from './utilities';
 
-const Calculator = () => {
+type CalculatorProps = {
+  onFinishOperation: (operators: OperatorItem[], result: number) => void;
+};
+
+const Calculator = ({ onFinishOperation }: CalculatorProps) => {
   const [displayValue, setDisplayValue] = useState('0');
+  const [operators, setOperators] = useState<OperatorItem[]>([]);
 
-  const handleClick = (value: string) => () => {
+  const handleClick = (value: OperatorItem) => () => {
+    if (isOperator(value)) {
+      setOperators(prev => [...prev, value]);
+    }
     if (displayValue === '0') {
       setDisplayValue(value);
     } else {
-      setDisplayValue(prevValue => prevValue + value);
+      setDisplayValue(prev => prev + value);
     }
   };
 
   const handleClear = () => {
     setDisplayValue('0');
+    setOperators([]);
   };
 
   const handleCalculate = () => {
     try {
       const result = eval(displayValue);
       setDisplayValue(result.toString());
+      onFinishOperation(operators, result);
     } catch (error) {
       setDisplayValue('Error');
+    } finally {
+      setOperators([]);
     }
   };
 
   return (
-    <div className="mx-auto w-72 rounded-md bg-gray-800 p-4">
+    <div className="calculator__container">
       <input
         type="text"
         value={displayValue}
-        className="mb-4 rounded-md bg-gray-900 px-1 py-2 text-right text-2xl text-white outline-none"
+        className="calculator__result-input"
         readOnly
       />
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="calculator__button-container">
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('7')}
         >
           7
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('8')}
         >
           8
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('9')}
         >
           9
         </button>
         <button
-          className="rounded-md bg-yellow-500 py-2 text-white hover:bg-yellow-600"
+          className="rounded-button rounded-button--primary"
           onClick={handleClick('/')}
         >
           ÷
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('4')}
         >
           4
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('5')}
         >
           5
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('6')}
         >
           6
         </button>
         <button
-          className="rounded-md bg-yellow-500 py-2 text-white hover:bg-yellow-600"
+          className="rounded-button rounded-button--primary"
           onClick={handleClick('*')}
         >
           ×
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('1')}
         >
           1
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('2')}
         >
           2
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('3')}
         >
           3
         </button>
         <button
-          className="rounded-md bg-yellow-500 py-2 text-white hover:bg-yellow-600"
+          className="rounded-button rounded-button--primary"
           onClick={handleClick('-')}
         >
           -
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('0')}
         >
           0
         </button>
         <button
-          className="rounded-md bg-gray-600 py-2 text-white hover:bg-gray-700"
+          className="rounded-button rounded-button--primary"
           onClick={handleClick('.')}
         >
           .
         </button>
         <button
-          className="rounded-md bg-yellow-500 py-2 text-white hover:bg-yellow-600"
+          className="rounded-button rounded-button--primary"
           onClick={handleCalculate}
         >
           =
         </button>
         <button
-          className="rounded-md bg-yellow-500 py-2 text-white hover:bg-yellow-600"
+          className="rounded-button rounded-button--primary"
           onClick={handleClick('+')}
         >
           +
@@ -135,7 +148,7 @@ const Calculator = () => {
       </div>
 
       <button
-        className="mt-4 rounded-md bg-gray-500 py-2 text-white hover:bg-gray-600"
+        className="rounded-button rounded-button--secondary"
         onClick={handleClear}
       >
         AC
