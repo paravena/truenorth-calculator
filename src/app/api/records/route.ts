@@ -1,7 +1,7 @@
 import { OperationRecord, PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from '@clerk/nextjs/server';
-import { OperationRecord as OperationRecordPayload } from '@/models';
+import { OperationRecordPayload } from '@/models';
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
@@ -10,6 +10,9 @@ export async function GET(request: NextRequest) {
   if (authUser.userId) {
     records = await prisma.operationRecord.findMany({
       where: { userId: authUser.userId },
+      include: {
+        operation: true,
+      },
     });
   }
   return NextResponse.json(records);

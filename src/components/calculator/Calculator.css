@@ -1,5 +1,5 @@
 .calculator__container {
-  @apply mx-auto w-72 rounded-md bg-gray-800 p-4;
+  @apply mx-auto w-72 rounded-md bg-gray-800 p-4 mt-8;
 }
 
 .calculator__result-input {

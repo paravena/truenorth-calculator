@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { UserButton, useUser } from '@clerk/nextjs';
+import { TrueNorth } from '@/assets/icons';
 
 const Header = () => {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -17,7 +18,7 @@ const Header = () => {
         {isLoaded && isSignedIn && (
           <>
             <Link href="/" className="-m-1.5 p-1.5">
-              <h2 className="">True North Calculator</h2>
+              <TrueNorth />
             </Link>
             <div className="flex flex-1 justify-end">
               <UserButton afterSignOutUrl="/" />

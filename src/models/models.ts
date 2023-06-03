@@ -1,3 +1,5 @@
+import { OPERATION_TYPE } from '@prisma/client';
+
 enum Operator {
   ADDITION = 'ADDITION',
   SUBSTRACTION = 'SUBSTRACTION',
@@ -16,7 +18,7 @@ export const OperatorMapper: Record<string, Operator> = {
   'RANDOM': Operator.RANDOM_STRING,
 };
 
-export type OperationRecord = {
+export type OperationRecordPayload = {
   amount: number;
   operators: Operator[];
 };
