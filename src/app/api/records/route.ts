@@ -22,21 +22,30 @@ export async function POST(request: NextRequest) {
   const authUser = await getAuth(request);
   const payload: OperationRecordPayload = await request.json();
   const conditions = payload.operators.map(opt => ({ type: opt }));
+
   const operations = await prisma.operation.findMany({
     where: { OR: conditions },
   });
-  operations.forEach(opt => {});
+
   if (authUser.userId) {
     const user = await prisma.user.findUnique({
       where: { id: authUser.userId },
     });
     if (user) {
-      let amount = user.amount;
+      // verify balance
+      let balance = user.amount;
+      const totalCost = operations.reduce((total, op) => total + op.cost, 0);
+      if (balance < totalCost) {
+        return NextResponse.json(
+          { message: 'Insufficient balance' },
+          { status: 400 },
+        );
+      }
       for (const opt of operations) {
-        amount = amount - opt.cost;
+        balance = balance - opt.cost;
         await prisma.operationRecord.create({
           data: {
-            amount,
+            amount: balance,
             userId: authUser.userId,
             operationId: opt.id,
           },
@@ -44,7 +53,7 @@ export async function POST(request: NextRequest) {
       }
       await prisma.user.update({
         data: {
-          amount,
+          amount: balance,
         },
         where: { id: authUser.userId },
       });

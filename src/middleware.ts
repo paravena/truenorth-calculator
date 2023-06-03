@@ -24,9 +24,16 @@ const isPublic = (path: string) => {
 //   }
 //   return NextResponse.next();
 // });
-export default withClerkMiddleware(req => {
-  return NextResponse.next();
-});
+// export default withClerkMiddleware(req => {
+//   return NextResponse.next();
+// });
+// export const config = {
+//   matcher: '/((?!_next/image|_next/static|favicon.ico).*)',
+// };
+import { authMiddleware } from '@clerk/nextjs';
+
+export default authMiddleware();
+
 export const config = {
-  matcher: '/((?!_next/image|_next/static|favicon.ico).*)',
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 };

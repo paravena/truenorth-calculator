@@ -1,6 +1,6 @@
-import { SignUp } from '@clerk/nextjs/app-beta';
+import { SignUp } from '@clerk/nextjs';
 
-const Page = async () => {
+const Page = () => {
   return (
     <section className="py-48">
       <div className="flex justify-center">

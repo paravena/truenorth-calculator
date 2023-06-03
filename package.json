@@ -12,10 +12,10 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.15.0",
+    "@clerk/nextjs": "^4.19.1-staging.4",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
-    "next": "13.2.4",
+    "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "@headlessui/react": "^1.7.14",
