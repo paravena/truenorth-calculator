@@ -40,10 +40,11 @@ export async function POST(request: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
   if (eventType === 'user.created') {
-    console.log(`User ${id} was ${eventType}`);
+    const email = payload.email_addresses[0].email_address;
+    console.log(`User ${id}, ${email} was ${eventType}`);
     return NextResponse.json({}, { status: 201 });
     // const id = payload.id;
-    // const email = payload.email_addresses[0].email_address;
+
     //
     // try {
     //   if (id && email) {
