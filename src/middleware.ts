@@ -33,7 +33,7 @@ const isPublic = (path: string) => {
 import { authMiddleware } from '@clerk/nextjs';
 
 export default authMiddleware({
-  publicRoutes: ['/sign-in', '/sign-up'],
+  publicRoutes: ['/sign-in', '/sign-up', '/api/users/webhook'],
 });
 
 export const config = {
