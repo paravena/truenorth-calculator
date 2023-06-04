@@ -30,23 +30,21 @@ async function addRecords(
 }
 
 export default function Home() {
-  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
   const { data: records, isLoading: isLoadingRecords } = useSWR(
     '/api/records',
     fetchRecords,
   );
-  const { data: authUser, isLoading: isLoadingUser } = useSWR(
-    '/api/users',
-    fetchUser,
-  );
+
+  const {
+    data: authUser,
+    isLoading: isLoadingUser,
+    mutate,
+  } = useSWR('/api/users', fetchUser);
+
   const { trigger, isMutating } = useSWRMutation('/api/records', addRecords, {
     onSuccess: data => console.log('SWR DATA', data),
   });
-
-  if (isLoaded && !isSignedIn) {
-    router.push('/sign-in?redirectUrl=/');
-  }
 
   const onFinishOperation = async (
     operators: OperatorItem[],
@@ -54,6 +52,7 @@ export default function Home() {
   ) => {
     const operatorList = operators.map(opt => OperatorMapper[opt]);
     await trigger({ amount, operators: operatorList });
+    await mutate();
   };
 
   return (

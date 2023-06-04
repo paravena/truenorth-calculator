@@ -1,7 +1,12 @@
 'use client';
 import './Calculator.css';
-import React, { useState } from 'react';
-import { isOperator, OperatorItem } from './utilities';
+import React, { useRef, useState } from 'react';
+import {
+  fetchRandomNumber,
+  isMathExpressionValid,
+  isOperator,
+  OperatorItem,
+} from './utilities';
 
 type CalculatorProps = {
   onFinishOperation: (operators: OperatorItem[], result: number) => void;
@@ -9,11 +14,11 @@ type CalculatorProps = {
 
 const Calculator = ({ onFinishOperation }: CalculatorProps) => {
   const [displayValue, setDisplayValue] = useState('0');
-  const [operators, setOperators] = useState<OperatorItem[]>([]);
+  const operators = useRef<OperatorItem[]>([]);
 
   const handleClick = (value: OperatorItem) => () => {
     if (isOperator(value)) {
-      setOperators(prev => [...prev, value]);
+      operators.current = [...operators.current, value];
     }
     if (displayValue === '0') {
       setDisplayValue(value);
@@ -24,21 +29,52 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
 
   const handleClear = () => {
     setDisplayValue('0');
-    setOperators([]);
+    operators.current = [];
   };
 
   const handleCalculate = () => {
     try {
-      const result = eval(displayValue);
-      setDisplayValue(result.toString());
-      onFinishOperation(operators, result);
+      if (isMathExpressionValid(displayValue)) {
+        const result = eval(displayValue);
+        setDisplayValue(result.toString());
+        onFinishOperation(operators.current, result);
+      } else {
+        setDisplayValue('Error');
+      }
     } catch (error) {
       setDisplayValue('Error');
     } finally {
-      setOperators([]);
+      operators.current = [];
     }
   };
 
+  const handleRandomNumber = async () => {
+    const response = await fetchRandomNumber();
+    const randomNum = await response.json();
+    operators.current = [...operators.current, 'RAND'];
+    if (displayValue === '0') {
+      setDisplayValue(randomNum);
+    } else {
+      setDisplayValue(prev => prev + randomNum);
+    }
+  };
+
+  const handleSQRT = () => {
+    try {
+      if (isMathExpressionValid(displayValue)) {
+        const result = Math.sqrt(eval(displayValue));
+        setDisplayValue(result.toString());
+        operators.current = [...operators.current, 'SQRT'];
+        onFinishOperation(operators.current, result);
+      } else {
+        setDisplayValue('Error');
+      }
+    } catch (error) {
+      setDisplayValue('Error');
+    } finally {
+      operators.current = [];
+    }
+  };
   return (
     <div className="calculator__container">
       <input
@@ -49,6 +85,25 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
       />
 
       <div className="calculator__button-container">
+        <button
+          className="rounded-button rounded-button--secondary"
+          onClick={handleClear}
+        >
+          AC
+        </button>
+        <button
+          className="rounded-button rounded-button--secondary"
+          onClick={handleSQRT}
+        >
+          SQRT
+        </button>
+        <button
+          className="rounded-button rounded-button--secondary col-span-2"
+          onClick={handleRandomNumber}
+        >
+          RAND
+        </button>
+
         <button
           className="rounded-button rounded-button--secondary"
           onClick={handleClick('7')}
@@ -146,13 +201,6 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
           +
         </button>
       </div>
-
-      <button
-        className="rounded-button rounded-button--secondary"
-        onClick={handleClear}
-      >
-        AC
-      </button>
     </div>
   );
 };

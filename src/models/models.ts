@@ -15,7 +15,7 @@ export const OperatorMapper: Record<string, Operator> = {
   '*': Operator.MULTIPLICATION,
   '/': Operator.DIVISION,
   'SQRT': Operator.SQUARE_ROOT,
-  'RANDOM': Operator.RANDOM_STRING,
+  'RAND': Operator.RANDOM_STRING,
 };
 
 export type OperationRecordPayload = {
