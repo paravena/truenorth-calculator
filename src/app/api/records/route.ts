@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       const totalCost = operations.reduce((total, op) => total + op.cost, 0);
       if (balance < totalCost) {
         return NextResponse.json(
-          { message: 'Insufficient balance' },
+          { error: 'Insufficient balance' },
           { status: 400 },
         );
       }

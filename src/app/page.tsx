@@ -1,13 +1,12 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { Calculator, RecordTable, UserInfo } from '@/components';
+import { Alert, Calculator, RecordTable, UserInfo } from '@/components';
 import { OperatorItem } from '@/components/calculator/utilities';
 import { OperationRecordPayload, OperatorMapper } from '@/models';
 import { Operation, OperationRecord, User } from '@prisma/client';
+import { useState } from 'react';
 
 async function fetchRecords(
   url: string,
@@ -30,7 +29,7 @@ async function addRecords(
 }
 
 export default function Home() {
-  const router = useRouter();
+  const [error, setError] = useState('');
   const { data: records, isLoading: isLoadingRecords } = useSWR(
     '/api/records',
     fetchRecords,
@@ -43,7 +42,11 @@ export default function Home() {
   } = useSWR('/api/users', fetchUser);
 
   const { trigger, isMutating } = useSWRMutation('/api/records', addRecords, {
-    onSuccess: data => console.log('SWR DATA', data),
+    onSuccess: data => {
+      if (data.error) {
+        setError(data.error);
+      }
+    },
   });
 
   const onFinishOperation = async (
@@ -62,6 +65,7 @@ export default function Home() {
       </section>
       <section className="flex">
         <section className="flex-1">
+          {error && <Alert message={error} />}
           <Calculator onFinishOperation={onFinishOperation} />
         </section>
         <section className="flex-1">
