@@ -37,10 +37,10 @@ export async function POST(request: Request) {
   } catch (_) {
     return new Response('Bad Request', { status: 400 });
   }
-  const { id } = evt.data;
   const eventType = evt.type;
   if (eventType === 'user.created') {
-    const email = payload.email_addresses[0].email_address;
+    const { id, email_addresses } = evt.data;
+    const email = email_addresses[0].email_address;
     console.log(`User ${id}, ${email} was ${eventType}`);
     return NextResponse.json({}, { status: 201 });
     // const id = payload.id;
