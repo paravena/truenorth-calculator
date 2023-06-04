@@ -1,14 +1,11 @@
-import { Webhook, WebhookRequiredHeaders } from 'svix';
+import { Webhook } from 'svix';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
-import { IncomingHttpHeaders } from 'http';
+import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
-
-type NextApiRequestWithSvixRequiredHeaders = NextRequest & {
-  headers: IncomingHttpHeaders & WebhookRequiredHeaders;
-};
+import { PrismaClient } from '@prisma/client';
 
 const webhookSecret: string = process.env.WEBHOOK_SECRET || '';
+const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   const payload = await request.json();
@@ -41,24 +38,19 @@ export async function POST(request: Request) {
   if (eventType === 'user.created') {
     const { id, email_addresses } = evt.data;
     const email = email_addresses[0].email_address;
-    console.log(`User ${id}, ${email} was ${eventType}`);
-    return NextResponse.json({}, { status: 201 });
-    // const id = payload.id;
-
-    //
-    // try {
-    //   if (id && email) {
-    //     const newUser = await prisma.user.create({
-    //       data: { email, id: id },
-    //     });
-    //     console.log('new user', newUser);
-    //     return NextResponse.json(newUser, { status: 201 });
-    //   }
-    // } catch (error) {
-    //   return NextResponse.json(
-    //     { message: 'something failed' },
-    //     { status: 500 },
-    //   );
-    // }
+    try {
+      if (id && email) {
+        const newUser = await prisma.user.create({
+          data: { email, id: id },
+        });
+        console.log('new user', newUser);
+        return NextResponse.json(newUser, { status: 201 });
+      }
+    } catch (error) {
+      return NextResponse.json(
+        { message: 'something failed' },
+        { status: 500 },
+      );
+    }
   }
 }
