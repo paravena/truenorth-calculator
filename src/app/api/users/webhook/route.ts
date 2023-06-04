@@ -2,6 +2,7 @@ import { Webhook, WebhookRequiredHeaders } from 'svix';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { IncomingHttpHeaders } from 'http';
+import { headers } from 'next/headers';
 
 type NextApiRequestWithSvixRequiredHeaders = NextRequest & {
   headers: IncomingHttpHeaders & WebhookRequiredHeaders;
@@ -9,15 +10,32 @@ type NextApiRequestWithSvixRequiredHeaders = NextRequest & {
 
 const webhookSecret: string = process.env.WEBHOOK_SECRET || '';
 
-export async function POST(request: NextApiRequestWithSvixRequiredHeaders) {
-  const payload = JSON.stringify(request.body);
-  const headers = request.headers;
+export async function POST(request: Request) {
+  const payload = await request.json();
+  const payloadString = JSON.stringify(payload);
+  const headerPayload = headers();
+  const svixId = headerPayload.get('svix-id');
+  const svixIdTimeStamp = headerPayload.get('svix-timestamp');
+  const svixSignature = headerPayload.get('svix-signature');
+
+  if (!svixId || !svixIdTimeStamp || !svixSignature) {
+    return new Response('Bad Request', {
+      status: 400,
+    });
+  }
+
+  const svixHeaders = {
+    'svix-id': svixId,
+    'svix-timestamp': svixIdTimeStamp,
+    'svix-signature': svixSignature,
+  };
+
   const wh = new Webhook(webhookSecret);
   let evt: WebhookEvent;
   try {
-    evt = wh.verify(payload, headers) as WebhookEvent;
+    evt = wh.verify(payloadString, svixHeaders) as WebhookEvent;
   } catch (_) {
-    return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
+    return new Response('Bad Request', { status: 400 });
   }
   const { id } = evt.data;
   const eventType = evt.type;
