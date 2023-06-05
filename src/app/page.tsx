@@ -63,7 +63,7 @@ export default function Home() {
       <section>
         <UserInfo user={authUser} loading={isLoadingUser} />
       </section>
-      <section className="flex">
+      <section className="flex flex-col sm:flex-row">
         <section className="flex-1">
           {error && <Alert message={error} />}
           <Calculator onFinishOperation={onFinishOperation} />

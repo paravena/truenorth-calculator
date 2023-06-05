@@ -7,7 +7,7 @@ type UserInfoProps = {
 };
 const UserInfo = ({ user, loading }: UserInfoProps) => {
   return (
-    <div className="flex justify-around p-12">
+    <div className="flex flex-col justify-around p-4 sm:flex-row sm:p-12">
       <div className="flex items-center gap-2">
         <span className="text-xl font-semibold text-gray-900">Email:</span>{' '}
         <span className="text-xl">{loading ? <Spinner /> : user?.email}</span>

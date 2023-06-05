@@ -34,7 +34,7 @@ const RecordTable = ({ records, loading }: RecordTableProps) => (
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                   >
                     Date
                   </th>
@@ -53,7 +53,7 @@ const RecordTable = ({ records, loading }: RecordTableProps) => (
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {record.amount}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
                         {record.date.toString()}
                       </td>
                     </tr>
