@@ -1,4 +1,4 @@
-import { OPERATION_TYPE } from '@prisma/client';
+import { Operation, OPERATION_TYPE, OperationRecord } from '@prisma/client';
 
 enum Operator {
   ADDITION = 'ADDITION',
@@ -21,4 +21,17 @@ export const OperatorMapper: Record<string, Operator> = {
 export type OperationRecordPayload = {
   amount: number;
   operators: Operator[];
+};
+
+export type OperationRecordItem = OperationRecord & { operation: Operation };
+
+export type OperationRecordResponse = {
+  data: OperationRecordItem[];
+  pagination: {
+    numberOfPages: number;
+    currentPage: number;
+    count: number;
+    fromItem: number;
+    toItem: number;
+  };
 };

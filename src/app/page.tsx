@@ -4,14 +4,19 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { Alert, Calculator, RecordTable, UserInfo } from '@/components';
 import { OperatorItem } from '@/components/calculator/utilities';
-import { OperationRecordPayload, OperatorMapper } from '@/models';
-import { Operation, OperationRecord, User } from '@prisma/client';
-import { useState } from 'react';
+import {
+  OperationRecordPayload,
+  OperationRecordResponse,
+  OperatorMapper,
+} from '@/models';
+import { User } from '@prisma/client';
+import { useCallback, useRef, useState } from 'react';
 
 async function fetchRecords(
   url: string,
-): Promise<(OperationRecord & { operation: Operation })[]> {
-  return fetch(url).then(res => res.json());
+  page = 1,
+): Promise<OperationRecordResponse> {
+  return fetch(`${url}?page=${page}`).then(res => res.json());
 }
 
 async function fetchUser(url: string): Promise<User> {
@@ -30,10 +35,12 @@ async function addRecords(
 
 export default function Home() {
   const [error, setError] = useState('');
-  const { data: records, isLoading: isLoadingRecords } = useSWR(
-    '/api/records',
-    fetchRecords,
-  );
+  const page = useRef(1);
+  const {
+    data: records,
+    isLoading: isLoadingRecords,
+    mutate: mutateRecords,
+  } = useSWR('/api/records', url => fetchRecords(url, page.current));
 
   const {
     data: authUser,
@@ -58,6 +65,15 @@ export default function Home() {
     await mutate();
   };
 
+  const onPreviousPage = useCallback(async () => {
+    page.current -= 1;
+    await mutateRecords();
+  }, [mutateRecords]);
+  const onNextPage = useCallback(async () => {
+    page.current += 1;
+    await mutateRecords();
+  }, [mutateRecords]);
+
   return (
     <main>
       <section>
@@ -69,7 +85,12 @@ export default function Home() {
           <Calculator onFinishOperation={onFinishOperation} />
         </section>
         <section className="flex-1">
-          <RecordTable records={records} loading={isMutating} />
+          <RecordTable
+            records={records}
+            loading={isMutating || isLoadingRecords}
+            onPreviousPage={onPreviousPage}
+            onNextPage={onNextPage}
+          />
         </section>
       </section>
     </main>

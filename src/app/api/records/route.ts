@@ -6,16 +6,46 @@ const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   let records: OperationRecord[] = [];
+
+  const searchParams = request.nextUrl.searchParams;
+  const page = parseInt(searchParams.get('page') || '1');
+  const pageSize = parseInt(searchParams.get('pageSize') || '10');
+  const offset = (page - 1) * pageSize;
+  const limit = pageSize;
   const authUser = await getAuth(request);
+  let count = 0;
+  let numberOfPages = 0;
+  let fromItem = 0;
+  let toItem = 0;
   if (authUser.userId) {
+    count = await prisma.operationRecord.count({
+      where: { userId: authUser.userId },
+    });
     records = await prisma.operationRecord.findMany({
       where: { userId: authUser.userId },
+      skip: offset,
+      take: limit,
       include: {
         operation: true,
       },
     });
+    numberOfPages = Math.ceil(count / pageSize);
+    fromItem = (page - 1) * pageSize + 1;
+    toItem = fromItem + pageSize - 1;
+    if (toItem > count) {
+      toItem = count;
+    }
   }
-  return NextResponse.json(records);
+  return NextResponse.json({
+    data: records,
+    pagination: {
+      count,
+      numberOfPages,
+      currentPage: page,
+      fromItem,
+      toItem,
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {
