@@ -86,19 +86,19 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
 
       <div className="calculator__button-container">
         <button
-          className="rounded-button rounded-button--secondary"
+          className="rounded-button rounded-button--primary"
           onClick={handleClear}
         >
           AC
         </button>
         <button
-          className="rounded-button rounded-button--secondary"
+          className="rounded-button rounded-button--primary"
           onClick={handleSQRT}
         >
           SQRT
         </button>
         <button
-          className="rounded-button rounded-button--secondary col-span-2"
+          className="rounded-button rounded-button--primary col-span-2"
           onClick={handleRandomNumber}
         >
           RAND
