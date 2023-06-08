@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body suppressHydrationWarning={true}>
+        <body suppressHydrationWarning={true} className="mx-auto max-w-7xl">
           <SignedIn>
             <Header />
           </SignedIn>

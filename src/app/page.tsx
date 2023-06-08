@@ -82,7 +82,7 @@ export default function Home() {
         <UserInfo user={authUser} loading={isLoadingUser} />
       </section>
       <section className="flex flex-col sm:flex-row">
-        <section className="flex-1 p-8">
+        <section className="max-w-8 p-8">
           {error && <Alert message={error} />}
           {isMutating && (
             <div className="flex items-center justify-center p-8 text-2xl">
