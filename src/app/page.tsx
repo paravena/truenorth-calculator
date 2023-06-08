@@ -11,6 +11,7 @@ import {
 } from '@/models';
 import { User } from '@prisma/client';
 import { useCallback, useRef, useState } from 'react';
+import { Spinner } from '@/assets/icons/Spinner';
 
 async function fetchRecords(
   url: string,
@@ -83,7 +84,15 @@ export default function Home() {
       <section className="flex flex-col sm:flex-row">
         <section className="flex-1 p-8">
           {error && <Alert message={error} />}
-          <Calculator onFinishOperation={onFinishOperation} />
+          {isMutating && (
+            <div className="flex items-center justify-center p-8 text-2xl">
+              <span className="mr-4">Processing Operation</span> <Spinner />
+            </div>
+          )}
+          <Calculator
+            onFinishOperation={onFinishOperation}
+            loading={isMutating}
+          />
         </section>
         <section className="flex-1">
           <RecordTable

@@ -31,7 +31,7 @@ const Pagination = ({
     <div className="flex flex-1 justify-between sm:justify-end">
       {currentPage > 1 && (
         <button
-          className="nav-button"
+          className="nav-button disabled:opacity-75"
           onClick={onPreviousPage}
           disabled={loading}
         >
@@ -40,7 +40,7 @@ const Pagination = ({
       )}
       {currentPage < numberOfPages && (
         <button
-          className="nav-button ml-3"
+          className="nav-button ml-3 disabled:opacity-75"
           onClick={onNextPage}
           disabled={loading}
         >

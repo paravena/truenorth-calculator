@@ -10,9 +10,10 @@ import {
 
 type CalculatorProps = {
   onFinishOperation: (operators: OperatorItem[], result: number) => void;
+  loading: boolean;
 };
 
-const Calculator = ({ onFinishOperation }: CalculatorProps) => {
+const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
   const [displayValue, setDisplayValue] = useState('0');
   const operators = useRef<OperatorItem[]>([]);
 
@@ -44,6 +45,7 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
     } catch (error) {
       setDisplayValue('Error');
     } finally {
+      setDisplayValue('0');
       operators.current = [];
     }
   };
@@ -72,6 +74,7 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
     } catch (error) {
       setDisplayValue('Error');
     } finally {
+      setDisplayValue('0');
       operators.current = [];
     }
   };
@@ -183,14 +186,15 @@ const Calculator = ({ onFinishOperation }: CalculatorProps) => {
           0
         </button>
         <button
-          className="rounded-button rounded-button--primary"
+          className="rounded-button rounded-button--secondary"
           onClick={handleClick('.')}
         >
           .
         </button>
         <button
-          className="rounded-button rounded-button--primary"
+          className="rounded-button rounded-button--primary disabled:opacity-75"
           onClick={handleCalculate}
+          disabled={loading}
         >
           =
         </button>
