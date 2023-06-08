@@ -1,3 +1,4 @@
+import './Pagination.css';
 import { OperationRecordResponse } from '@/models';
 import { Spinner } from '@/assets/icons/Spinner';
 
@@ -16,6 +17,7 @@ const Pagination = ({
   onNextPage,
   loading,
 }: PaginationProps) => {
+  console.log('PAGINATION LOADING', loading);
   return (
     <nav
       className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
@@ -30,24 +32,23 @@ const Pagination = ({
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
         {currentPage > 1 && (
-          <a
-            href="#"
-            className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+          <button
+            className="nav-button"
             onClick={onPreviousPage}
+            disabled={loading}
           >
-            Previous
-          </a>
+            Previous {loading && <Spinner />}
+          </button>
         )}
         {currentPage < numberOfPages && (
-          <a
-            href="#"
-            className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+          <button
+            className="nav-button ml-3"
             onClick={onNextPage}
+            disabled={loading}
           >
-            Next
-          </a>
+            Next {loading && <Spinner />}
+          </button>
         )}
-        {loading && <Spinner />}
       </div>
     </nav>
   );

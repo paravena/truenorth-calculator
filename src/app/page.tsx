@@ -39,13 +39,14 @@ export default function Home() {
   const {
     data: records,
     isLoading: isLoadingRecords,
+    isValidating: isValidatingRecords,
     mutate: mutateRecords,
   } = useSWR('/api/records', url => fetchRecords(url, page.current));
 
   const {
     data: authUser,
     isLoading: isLoadingUser,
-    mutate,
+    mutate: mutateUser,
   } = useSWR('/api/users', fetchUser);
 
   const { trigger, isMutating } = useSWRMutation('/api/records', addRecords, {
@@ -62,7 +63,7 @@ export default function Home() {
   ) => {
     const operatorList = operators.map(opt => OperatorMapper[opt]);
     await trigger({ amount, operators: operatorList });
-    await mutate();
+    await mutateUser();
   };
 
   const onPreviousPage = useCallback(async () => {
@@ -80,14 +81,15 @@ export default function Home() {
         <UserInfo user={authUser} loading={isLoadingUser} />
       </section>
       <section className="flex flex-col sm:flex-row">
-        <section className="flex-1">
+        <section className="flex-1 p-8">
           {error && <Alert message={error} />}
           <Calculator onFinishOperation={onFinishOperation} />
         </section>
         <section className="flex-1">
+          loading {isLoadingRecords || isValidatingRecords}
           <RecordTable
             records={records}
-            loading={isMutating || isLoadingRecords}
+            loading={isLoadingRecords || isValidatingRecords}
             onPreviousPage={onPreviousPage}
             onNextPage={onNextPage}
           />

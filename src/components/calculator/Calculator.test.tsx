@@ -49,5 +49,19 @@ describe('Calculator', () => {
     expect(onFinishOperationMock).toHaveBeenCalledWith(['+'], 10);
   });
 
-  // Add more test cases as needed
+  it('should display Error when a bad math expression is entered', () => {
+    const onFinishOperationMock = jest.fn();
+    const { getByText, getByDisplayValue } = render(
+      <Calculator onFinishOperation={onFinishOperationMock} />,
+    );
+    const numberButton1 = getByText('7');
+    fireEvent.click(numberButton1);
+    const operatorButton = getByText('+');
+    fireEvent.click(operatorButton);
+    fireEvent.click(operatorButton);
+    const equalsButton = getByText('=');
+    fireEvent.click(equalsButton);
+    const displayValue = getByDisplayValue('Error');
+    expect(displayValue).toBeInTheDocument();
+  });
 });
