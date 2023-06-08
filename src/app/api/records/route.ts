@@ -28,6 +28,9 @@ export async function GET(request: NextRequest) {
       include: {
         operation: true,
       },
+      orderBy: {
+        date: 'desc',
+      },
     });
     numberOfPages = Math.ceil(count / pageSize);
     fromItem = (page - 1) * pageSize + 1;
