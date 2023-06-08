@@ -86,7 +86,6 @@ export default function Home() {
           <Calculator onFinishOperation={onFinishOperation} />
         </section>
         <section className="flex-1">
-          loading {isLoadingRecords || isValidatingRecords}
           <RecordTable
             records={records}
             loading={isLoadingRecords || isValidatingRecords}
