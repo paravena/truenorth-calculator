@@ -10,10 +10,13 @@ import {
 
 type CalculatorProps = {
   onFinishOperation: (operators: OperatorItem[], result: number) => void;
-  loading: boolean;
+  loading?: boolean;
 };
 
-const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
+const Calculator = ({
+  onFinishOperation,
+  loading = false,
+}: CalculatorProps) => {
   const [displayValue, setDisplayValue] = useState('0');
   const operators = useRef<OperatorItem[]>([]);
 
@@ -33,10 +36,14 @@ const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
     operators.current = [];
   };
 
-  const handleCalculate = () => {
+  const handleCalculate = (sqrt = false) => {
     try {
       if (isMathExpressionValid(displayValue)) {
-        const result = eval(displayValue);
+        let result = eval(displayValue);
+        if (sqrt) {
+          result = Math.sqrt(result);
+          operators.current = [...operators.current, 'SQRT'];
+        }
         setDisplayValue(result.toString());
         onFinishOperation(operators.current, result);
       } else {
@@ -45,7 +52,6 @@ const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
     } catch (error) {
       setDisplayValue('Error');
     } finally {
-      setDisplayValue('0');
       operators.current = [];
     }
   };
@@ -61,23 +67,6 @@ const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
     }
   };
 
-  const handleSQRT = () => {
-    try {
-      if (isMathExpressionValid(displayValue)) {
-        const result = Math.sqrt(eval(displayValue));
-        setDisplayValue(result.toString());
-        operators.current = [...operators.current, 'SQRT'];
-        onFinishOperation(operators.current, result);
-      } else {
-        setDisplayValue('Error');
-      }
-    } catch (error) {
-      setDisplayValue('Error');
-    } finally {
-      setDisplayValue('0');
-      operators.current = [];
-    }
-  };
   return (
     <div className="calculator__container">
       <input
@@ -96,7 +85,7 @@ const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
         </button>
         <button
           className="rounded-button rounded-button--primary"
-          onClick={handleSQRT}
+          onClick={() => handleCalculate(true)}
         >
           SQRT
         </button>
@@ -193,7 +182,7 @@ const Calculator = ({ onFinishOperation, loading }: CalculatorProps) => {
         </button>
         <button
           className="rounded-button rounded-button--primary disabled:opacity-75"
-          onClick={handleCalculate}
+          onClick={() => handleCalculate(false)}
           disabled={loading}
         >
           =

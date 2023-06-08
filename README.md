@@ -66,7 +66,7 @@ There are a lot of Environment Variables to Set up
 
 Note: Is not ideal to have so many Database related environment variables, 
 When I was deploying this web app in Railway I had only one but when I migrated 
-this to Vercel, they starting growing, I didn't have enough time to fix this issue
+this to Vercel, they started growing, I didn't have enough time to fix this issue
 
 ## Database setup
 
@@ -79,32 +79,35 @@ npx prisma db seed
 ## Authentication Mechanism
 
 I decided to use an OAuth provider for this purpose, in the past I have used Auth0, 
-but nowadays there is no compatibility with NextJS version 13. I decided to try Clerk (https://clerk.com), 
-which has very good documentation, I found a couple of tutorials and everything when smoothly until
+but nowadays, there is no compatibility with NextJS version 13. I decided to try Clerk (https://clerk.com), 
+which has very good documentation, I found a couple of tutorials and everything went smoothly until
 I deployed the web app in Railway environment and try it, the web app crashed in an infinite redirect loop, 
-I realised that this was a reported issue in Discord so in a desperate decision I deploy the web app in Vercel. 
-Anyway to configure this Clerk provider you need to create an Application in Clerk
+I realised that this was a reported issue in Discord Clerk support channel, so in a desperate decision I deployed 
+the web app in Vercel. Anyway to configure this Clerk provider you need to create an Application in Clerk
 Take the Public KEY and Secret and set them as environment variables. See this documents
 
 https://clerk.com/docs
-And this is very useful to setup the Webhook which in this web app is /users/webhook
+
+After setting up Clerk, you will need to configure the Webhook which in this web app is /users/webhook
 https://beta-docs.clerk.com/users/guides/sync-data-to-your-backend
 Also you will have an issue if you want to run this locally because the webhook
-endpoint should be visible consider using Ngrok (https://ngrok.com/) in this case
+endpoint should be visible in the network consider using Ngrok tool (https://ngrok.com/) for this purpose
 
 Unit Testing
 
-I did a couple of test for the Calculator component, I didn't have enough time :(
+I did a couple of test for the Calculator and RecordTable components, I didn't have enough time :(
 
 ## Time Dedicated to the Project
 
-| Date                  | Hours     |
-|-----------------------|-----------|
-| May 27                | 4 hours   |
-| May 28                | 6 hours   |
-| May 29                | 2 hours   |
-| May 30                | 1 hour    |
-| June 02               | 2 hours   |
-| June 03               | 6 hours   |
-| June 04               | 6 hours   |
-| Total                 | 33 hours  |
+| Date    | Hours    |
+|---------|----------|
+| May 27  | 4 hours  |
+| May 28  | 6 hours  |
+| May 29  | 2 hours  |
+| May 30  | 1 hour   |
+| June 02 | 2 hours  |
+| June 03 | 6 hours  |
+| June 04 | 6 hours  |
+| June 06 | 2 hours  |
+| June 07 | 2 hours  |
+| Total   | 37 hours |
